@@ -3,5 +3,7 @@ module.exports = {
 	parserOptions: { tsconfigRootDir: __dirname },
 	rules: {
 		'no-console': 'off',
+		'unicorn/no-array-reduce': 'off',
+		'unicorn/prefer-switch': 'off',
 	},
 };
