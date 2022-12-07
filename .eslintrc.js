@@ -5,5 +5,6 @@ module.exports = {
 		'no-console': 'off',
 		'unicorn/no-array-reduce': 'off',
 		'unicorn/prefer-switch': 'off',
+		'unicorn/no-array-callback-reference': 'off',
 	},
 };
