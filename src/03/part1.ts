@@ -31,6 +31,8 @@ In the above example, the priority of the item type that appears in both compart
 Find the item type that appears in both compartments of each rucksack. What is the sum of the priorities of those item types?
  */
 
+import { add, setIntersection } from '../junk-drawer';
+
 function parseList(input: string): [Set<string>, Set<string>][] {
 	return input
 		.split('\n')
@@ -40,7 +42,7 @@ function parseList(input: string): [Set<string>, Set<string>][] {
 		]);
 }
 
-function score(character: string): number {
+export function score(character: string): number {
 	const code = character.codePointAt(0);
 	if (!code) {
 		throw new Error('Invalid input');
@@ -57,11 +59,11 @@ function score(character: string): number {
 export const part1 = (input: string): number =>
 	parseList(input)
 		.map(([compartment1, compartment2]) => {
-			const intersection = [...compartment1].filter((x) => compartment2.has(x));
+			const intersection = [...setIntersection([compartment1, compartment2])];
 			if (intersection.length !== 1) {
 				throw new Error('Invalid input');
 			}
 			return intersection[0];
 		})
 		.map((sharedItem) => score(sharedItem))
-		.reduce((a, b) => a + b, 0);
+		.reduce(add, 0);
