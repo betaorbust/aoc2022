@@ -42,7 +42,10 @@ function isContainingUniqueStrings(input: string): boolean {
 	return [...new Set(input)].length === input.length;
 }
 
-function findLengthBeforeUniqueRun(input: string, runLength: number): number {
+export function findLengthBeforeUniqueRun(
+	input: string,
+	runLength: number
+): number {
 	// Go through the string looking ahead runLength characters at a time
 	// until you find a set of runLength unique characters
 	for (let i = 0; i < input.length - runLength; i += 1) {
