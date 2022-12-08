@@ -22,3 +22,14 @@ export function arrayPartition<T>(array: T[], partitionSize: number): T[][] {
 	}
 	return partitions;
 }
+
+/**
+ * Extract matched values from a string
+ */
+export function extractValues(input: string, match: RegExp): string[] {
+	const matches = input.match(match);
+	if (!matches) {
+		throw new Error(`Could not match ${match} in ${input}`);
+	}
+	return matches.slice(1);
+}

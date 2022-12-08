@@ -51,6 +51,8 @@ The Elves just need to know which crate will end up on top of each stack; in thi
 After the rearrangement procedure completes, what crate ends up on top of each stack?
  */
 
+import { extractValues } from '../junk-drawer';
+
 // The two major types we'll be passing around
 type Board = string[][];
 type Instructions = [count: number, from: number, to: number][];
@@ -86,11 +88,8 @@ export function parseBoard(input: string): {
 
 	// Now do the instructions
 	const instructions: Instructions = instructionInput.map((line: string) => {
-		const match = line.match(/move (\d+) from (\d+) to (\d+)/);
-		if (!match) {
-			throw new Error(`Could not parse instruction: ${line}`);
-		}
-		const [, number, from, to] = [...match].map((n) => Number.parseInt(n, 10));
+		const match = extractValues(line, /move (\d+) from (\d+) to (\d+)/);
+		const [number, from, to] = [...match].map((n) => Number.parseInt(n, 10));
 		return [number, from - 1, to - 1]; // account for 0-indexing
 	});
 
@@ -100,15 +99,39 @@ export function parseBoard(input: string): {
 /**
  * Does an instruction
  */
-function move(board: Board, from: number, to: number, count: number): Board {
+function move(
+	board: Board,
+	from: number,
+	to: number,
+	count: number,
+	allAtOnce: boolean
+): Board {
 	const boxesMoving = board[from].slice(0, count);
 	const boxesRemaining = board[from].slice(count);
 	const newBoard = [...board]; // Don't mutate the original board
-	// Reverse them and stack them on the top
-	newBoard[to] = [...boxesMoving.reverse(), ...newBoard[to]];
+	// Reverse them and stack them on the top if not doing all at once
+	if (!allAtOnce) {
+		boxesMoving.reverse();
+	}
+	newBoard[to] = [...boxesMoving, ...newBoard[to]];
 	// Whatever's left over
 	newBoard[from] = boxesRemaining;
 	return newBoard;
+}
+
+/**
+ * Run instructions and give back a board
+ */
+export function runInstructions(
+	board: Board,
+	instructions: Instructions,
+	allAtOnce: boolean
+): Board {
+	return instructions.reduce(
+		(currentBoard, [count, from, to]) =>
+			move(currentBoard, from, to, count, allAtOnce),
+		board
+	);
 }
 
 /**
@@ -117,12 +140,8 @@ function move(board: Board, from: number, to: number, count: number): Board {
 export const part1 = (input: string): string => {
 	const { board, instructions } = parseBoard(input);
 
-	// Run every instruction
-	const finalBoard = instructions.reduce(
-		(currentBoard, [count, from, to]) => move(currentBoard, from, to, count),
-		board
-	);
-
-	// Collect the top of each stack and join them up
-	return finalBoard.map((stack) => stack[0] || '').join('');
+	// run the instructions, collect the top of each stack, and join them up
+	return runInstructions(board, instructions, false)
+		.map((stack) => stack[0] || '')
+		.join('');
 };
