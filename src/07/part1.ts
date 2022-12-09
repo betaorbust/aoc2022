@@ -200,7 +200,7 @@ function makeDirectory(name: string, parent: Directory | null): Directory {
  * Parses the terminal input into a set of terminal line objects
  * we'll then replay to understand the file system.
  */
-function parseInput(input: string): TerminalLine[] {
+export function parseInput(input: string): TerminalLine[] {
 	return input.split('\n').map((line) => {
 		// Commands start with $
 		if (line[0] === '$') {
@@ -310,7 +310,7 @@ function actOnLine(
 /**
  * Takes a directory and finds all subdirectories that match a predicate
  */
-function getMatchingDirectories(
+export function getMatchingDirectories(
 	currentDirectory: Directory,
 	predicate: (entity: Directory) => boolean
 ): Directory[] {
@@ -347,7 +347,7 @@ export function printFileSystem(fileSystem: Directory, indent = 0): string {
 /**
  * Actually act on the lines of the terminal and build up the file system.
  */
-function replayTerminal(terminalLines: TerminalLine[]): Directory {
+export function replayTerminal(terminalLines: TerminalLine[]): Directory {
 	const rootDirectory: Directory = makeDirectory('/', null);
 
 	// mutative, but 🤷‍♂️
