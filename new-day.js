@@ -38,10 +38,16 @@ describe('Day ${today}', () => {
 });
 `;
 
-const part1 = `export const part1 = (input: string): string => {
+const part1 = `/**
+
+*/
+export const part1 = (input: string): string => {
     return 'not implemented';
 };`;
-const part2 = `export const part2 = (input: string): string => {
+const part2 = `/**
+
+*/
+export const part2 = (input: string): string => {
     return 'not implemented';
 };`;
 const solution = `import { part1 } from './part1';
