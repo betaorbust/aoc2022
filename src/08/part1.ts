@@ -30,7 +30,7 @@ Consider your map; how many trees are visible from outside the grid?
 */
 
 // A tree with neighbors 🌲
-type Tree = {
+export type Tree = {
 	height: number;
 	up: Tree | null;
 	down: Tree | null;
@@ -39,12 +39,12 @@ type Tree = {
 };
 
 // A forest of trees 🌲🌲🌲
-type Forrest = Tree[][];
+export type Forrest = Tree[][];
 
 /**
  * Parse the input into a forest of trees
  */
-function parseInput(input: string): Forrest {
+export function parseInput(input: string): Forrest {
 	return input
 		.split('\n')
 		.map((line) =>
@@ -93,7 +93,7 @@ function isVisibleInDirection(
 /**
  * Find visible trees
  */
-function findVisible(board: Forrest): Tree[] {
+export function findVisible(board: Forrest): Tree[] {
 	const results = [];
 	for (const row of board) {
 		for (const tree of row) {
