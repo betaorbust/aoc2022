@@ -50,7 +50,9 @@ export const parseInput = (
 		if (!match) {
 			throw new Error('Invalid input');
 		}
-		const [, start1, end1, start2, end2] = [...match].map(Number.parseInt);
+		const [, start1, end1, start2, end2] = [...match].map((n) =>
+			Number.parseInt(n, 10)
+		);
 		return [
 			[start1, end1],
 			[start2, end2],
