@@ -225,7 +225,7 @@ type Program = Array<CommandNoop | CommandAddX>;
 /**
  * Parse the string input into a Program
  */
-function parseInput(input: string): Program {
+export function parseInput(input: string): Program {
 	return input.split('\n').map((line) => {
 		const [type, value] = line.split(' ');
 		if (type === 'noop') {
@@ -241,7 +241,10 @@ function parseInput(input: string): Program {
 /**
  * Run the program, calling cycleCallback on every cycle
  */
-function runProgram(program: Program, cycleCallback: CycleCallback): void {
+export function runProgram(
+	program: Program,
+	cycleCallback: CycleCallback
+): void {
 	let cycle = 0;
 	let x = 1;
 	program.forEach((command) => {
