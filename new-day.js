@@ -14,38 +14,36 @@ const nextDir = today.toString().padStart(2, '0');
 const dirPath = path.join('./src', nextDir);
 fs.mkdirSync(dirPath);
 
-const test = `import { expect, test, describe } from '@jest/globals';
-import { part1 } from './part1';
+const test = `import { part1 } from './part1';
 // import { part2 } from './part2';
 
-const testCasesPt1: [Parameters<typeof part1>[0], ReturnType<typeof part1>][] = [];
+const testCasesPt1: [Parameters<typeof part1>[0], ReturnType<typeof part1>][] =
+	[];
 
-// const testCasesPt2: [Parameters<typeof part2>[0], ReturnType<typeof part2>][] = [];
-
-describe('Day ${today}', () => {
-	test.each(testCasesPt1)(
-		'Part 1. Input: %s. Output: %s',
-		(input, expected) => {
-			expect(part1(input)).toBe(expected);
-		}
-	);
-//	test.each(testCasesPt2)(
-//		'Part 2. Input: %s. Output: %s',
-//		(input, expected) => {
-//			expect(part2(input)).toBe(expected);
-//		}
-//	);
+describe('Day ${today}, part 1', () => {
+	test.each(testCasesPt1)('Input: %s. Output: %s', (input, expected) => {
+		expect(part1(input)).toBe(expected);
+	});
 });
+
+// const testCasesPt2: [Parameters<typeof part2>[0], ReturnType<typeof part2>][] =
+// 	[];
+
+// describe('Day ${today}, part 2', () => {
+// 	test.each(testCasesPt2)('Input: %s. Output: %s', (input, expected) => {
+// 		expect(part1(input)).toBe(expected);
+// 	});
+// });
 `;
 
 const part1 = `/**
-
+ Part 1
 */
 export const part1 = (input: string): string => {
     return 'not implemented';
 };`;
 const part2 = `/**
-
+ Part 2
 */
 export const part2 = (input: string): string => {
     return 'not implemented';
@@ -58,8 +56,24 @@ const input = "";
 console.log('Part 1:', part1(input));
 console.log('Part 2:', part2(input));
 `;
+const prompt = `# Advent of Code Day ${today}
+
+## Part 1
+
+<pre>
+
+</pre>
+
+## Part 2
+
+<pre>
+
+</pre>
+
+`;
 
 fs.writeFileSync(path.join(dirPath, 'all.test.ts'), test);
 fs.writeFileSync(path.join(dirPath, 'part1.ts'), part1);
 fs.writeFileSync(path.join(dirPath, 'part2.ts'), part2);
 fs.writeFileSync(path.join(dirPath, 'solution.ts'), solution);
+fs.writeFileSync(path.join(dirPath, 'prompt.md'), prompt);

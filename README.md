@@ -11,10 +11,10 @@ npm install    # Spin those fans
 npm run day 03 # Run a day (actual directory name, so leading 0 is important)
 ```
 
-Making a new day
+Making the next day
 
 ```
-node ./new-day.js
+npm run new
 ```
 
 ## Code of Conduct
