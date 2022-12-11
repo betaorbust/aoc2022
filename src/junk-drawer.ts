@@ -33,3 +33,49 @@ export function extractValues(input: string, match: RegExp): string[] {
 	}
 	return matches.slice(1);
 }
+
+/**
+ * For doing 2d spacial manipulation
+ */
+export class Vector {
+	x: number;
+
+	y: number;
+
+	constructor(x: number, y: number) {
+		this.x = x;
+		this.y = y;
+	}
+
+	add(other: Vector): Vector {
+		return new Vector(this.x + other.x, this.y + other.y);
+	}
+
+	subtract(other: Vector): Vector {
+		return this.add(other.scalarMultiply(-1));
+	}
+
+	scalarMultiply(scalar: number): Vector {
+		return new Vector(this.x * scalar, this.y * scalar);
+	}
+
+	scalarDivide(scalar: number): Vector {
+		return new Vector(this.x / scalar, this.y / scalar);
+	}
+
+	magnitude(): number {
+		return Math.abs(this.x) + Math.abs(this.y);
+	}
+
+	normalize(): Vector {
+		return this.scalarDivide(this.magnitude());
+	}
+
+	isEqualTo(other: Vector): boolean {
+		return this.x === other.x && this.y === other.y;
+	}
+
+	toString(): string {
+		return `(${this.x}, ${this.y})`;
+	}
+}
