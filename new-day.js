@@ -31,7 +31,7 @@ describe('Day ${today}, part 1', () => {
 
 // describe('Day ${today}, part 2', () => {
 // 	test.each(testCasesPt2)('Input: %s. Output: %s', (input, expected) => {
-// 		expect(part1(input)).toBe(expected);
+// 		expect(part2(input)).toBe(expected);
 // 	});
 // });
 `;
