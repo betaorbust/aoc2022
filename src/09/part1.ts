@@ -5,13 +5,15 @@ type Instruction = {
 	dist: number;
 };
 
+export type Rope = Vector[];
+
 const MAX_DISTANCE = Math.sqrt(2);
-type StepCallback = (head: Vector, tail: Vector) => void;
+type StepCallback = (rope: Rope) => void;
 
 /**
  * turn the input into a list of instructions
  */
-function parseInput(input: string): Instruction[] {
+export function parseInput(input: string): Instruction[] {
 	return input.split('\n').map((line) => {
 		const [dir, dist] = line.split(' ');
 		if (!(dir === 'L' || dir === 'R' || dir === 'U' || dir === 'D')) {
@@ -22,13 +24,45 @@ function parseInput(input: string): Instruction[] {
 }
 
 /**
+ * Resolve the updated position of the next knot in the rope
+ */
+function resolveNextKnot(head: Vector, next: Vector): Vector {
+	// Special case for overlap. Just leave tail where it is.
+	if (head.isEqualTo(next)) {
+		return next;
+	}
+	// get the difference from the head to the tail
+	const headToNext = next.subtract(head);
+	// normalize to MAX_DISTANCE
+	const headToNextNormalized = headToNext
+		.normalize()
+		.scalarMultiply(MAX_DISTANCE);
+
+	// Find where a normalized tail would go
+	const newNext = head.add(headToNextNormalized);
+	// round it to the nearest integer
+	return new Vector(Math.round(newNext.x), Math.round(newNext.y));
+}
+
+/**
+ * Modify the rope to resolve any needed motion
+ */
+function resolveRope(rope: Rope): Rope {
+	return rope.reduce<Rope>((result, current, currentIndex) => {
+		if (currentIndex === 0) {
+			return [current];
+		}
+		const previous = result[currentIndex - 1];
+		return [...result, resolveNextKnot(previous, current)];
+	}, []);
+}
+
+/**
  * Execute a single move, returning the new head and tail locations
  */
-function executeMove(
-	dir: Instruction['dir'],
-	head: Vector,
-	tail: Vector
-): [newHead: Vector, newTail: Vector] {
+function executeMove(dir: Instruction['dir'], rope: Rope): Rope {
+	const [head, ...rest] = rope;
+
 	// first move the head
 	let newHead: Vector;
 	switch (dir) {
@@ -48,42 +82,26 @@ function executeMove(
 			throw new Error('Invalid direction');
 	}
 
-	// Special case for overlap. Just leave tail where it is.
-	if (newHead.isEqualTo(tail)) {
-		return [newHead, tail];
-	}
-
-	// get the difference from the head to the tail
-	const headToTail = tail.subtract(newHead);
-	// normalize to MAX_DISTANCE
-	const headToTailNormalized = headToTail
-		.normalize()
-		.scalarMultiply(MAX_DISTANCE);
-
-	// Find where a normalized tail would go
-	const newTail = newHead.add(headToTailNormalized);
-	// round it to the nearest integer
-	return [newHead, new Vector(Math.round(newTail.x), Math.round(newTail.y))];
+	// then resolve the rest of the rope to match
+	return resolveRope([newHead, ...rest]);
 }
 
 /**
  * Run our list of instructions, calling stepCallback on every step
  */
-function runInstructions(
+export function runInstructions(
 	instructions: Instruction[],
+	numberOfKnots: number,
 	stepCallback: StepCallback
 ): void {
-	let headLocation: Vector = new Vector(0, 0);
-	let tailLocation: Vector = new Vector(0, 0);
+	let rope: Rope = Array.from({ length: numberOfKnots }).map(
+		() => new Vector(0, 0)
+	);
 
 	for (const instruction of instructions) {
 		for (let i = 0; i < instruction.dist; i += 1) {
-			[headLocation, tailLocation] = executeMove(
-				instruction.dir,
-				headLocation,
-				tailLocation
-			);
-			stepCallback(headLocation, tailLocation);
+			rope = executeMove(instruction.dir, rope);
+			stepCallback(rope);
 		}
 	}
 }
@@ -94,9 +112,8 @@ function runInstructions(
 export const part1 = (input: string): number => {
 	const instructions = parseInput(input);
 	const locationsTailHasBeen = new Set<string>();
-	const stepCallback: StepCallback = (head, tail) => {
-		locationsTailHasBeen.add(tail.toString());
-	};
-	runInstructions(instructions, stepCallback);
+	runInstructions(instructions, 2, (rope) => {
+		locationsTailHasBeen.add(rope[rope.length - 1].toString());
+	});
 	return locationsTailHasBeen.size;
 };
