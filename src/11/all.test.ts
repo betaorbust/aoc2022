@@ -1,5 +1,5 @@
 import { part1 } from './part1';
-// import { part2 } from './part2';
+import { part2 } from './part2';
 
 const testCasesPt1: [Parameters<typeof part1>[0], ReturnType<typeof part1>][] =
 	[
@@ -41,11 +41,11 @@ describe('Day 11, part 1', () => {
 	});
 });
 
-// const testCasesPt2: [Parameters<typeof part2>[0], ReturnType<typeof part2>][] =
-// 	[];
+const testCasesPt2: [Parameters<typeof part2>[0], ReturnType<typeof part2>][] =
+	[[testCasesPt1[0][0], 2_713_310_158]];
 
-// describe('Day 11, part 2', () => {
-// 	test.each(testCasesPt2)('Input: %s. Output: %s', (input, expected) => {
-// 		expect(part2(input)).toBe(expected);
-// 	});
-// });
+describe('Day 11, part 2', () => {
+	test.each(testCasesPt2)('Input: %s. Output: %s', (input, expected) => {
+		expect(part2(input)).toBe(expected);
+	});
+});
